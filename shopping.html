@@ -14,14 +14,24 @@
 
         <div id="app">
             <div class="product">
-            <div class="product-image">
-                <img :src="image" :alt="description">
-                <a :href="link">View more socks</a>
-                
-            </div>
-            <div class="product-info">
-                <h1>{{product}}</h1>
-            </div>
+                <div class="product-image">
+                    <img :src="image" :alt="description">
+                </div>
+                <div class="product-info">
+                    <h1>{{product}}</h1>
+                    <a :href="link">View more socks</a>
+                    <p v-if="inventory > 10">In Stock</p>
+                    <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
+                    <p v-else>Out of Stock</p>
+                    <!-- v-show more performant option than removing it from the dom entirely-->
+                    <p v-show="inStock">testing toggle</p>
+                    <p v-if="onSale">On Sale!</p>
+                    <ul>
+                        <li v-for="detail in details">{{detail}}</li>
+                    </ul>
+                    <h2>Sizes</h2>
+                    <p v-for="size in sizes">{{size}}</p>
+                </div>
             </div>
         </div>
     
