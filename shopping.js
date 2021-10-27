@@ -9,8 +9,52 @@ const app = new Vue ({
         inventory: 10,
         onSale: true,
         details:["80% cotton", "20% polyester", "Gender-neutral"],
-        sizes:["XL", "L", "M", "S", "XS"]
+        sizes:["XL", "L", "M", "S", "XS"],
+        cart: 0, 
+        variants:[
+            {
+            variantId: 2234,
+            variantColor: 'green',
+            variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg'
+            },
+            {
+            variantId: 2235,
+            variantColor: 'blue',
+            variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg'
+        }
+        ]
+    },
+    methods:{
+        addToCart: function () {
+            this.cart += 2;
+        },
+
+        updateProduct: function(variantImage){
+            this.image= variantImage;
+        },
+
+        decrement: function(){
+            this.cart--;
+        }
+        /*instead of writing the functions as anonymous functions
+        can write them using ES6 - but not all browsers
+        support this feature
+        
+        addToCart(){
+            this.cart +=1
+        },
+
+        updateProduct(variantImage){
+            this.image = variantImage
+        }
+    
+        */
+
     }
 });
 
+/*
+record of errors:
 
+
+*/
