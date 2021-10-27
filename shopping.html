@@ -7,13 +7,22 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://gist.github.com/atomjar/67db5aa9b7b9013dcf0d91c91f54e1a9.js"></script>">
+        <link rel="stylesheet" href="./shopping.css"></script>
     </head>
     <body>
-        <div id="app">
+        <div class="nav-bar"></div>
 
-            <h1>Product: {{product}}</h1>
-            <h2>Description: {{description}}</h2>
+        <div id="app">
+            <div class="product">
+            <div class="product-image">
+                <img :src="image" :alt="description">
+                <a :href="link">View more socks</a>
+                
+            </div>
+            <div class="product-info">
+                <h1>{{product}}</h1>
+            </div>
+            </div>
         </div>
     
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
