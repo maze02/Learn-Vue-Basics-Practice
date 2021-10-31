@@ -10,7 +10,7 @@ Vue.component('product', {
     template: `
     <div class="product">
         <div class="product-image">
-            <img :src="image" :alt="description">
+            <img :src="image" />
         </div>
         <div class="product-info">
             <h1>{{product}}</h1>
@@ -26,11 +26,12 @@ Vue.component('product', {
             <p v-if="onSale">On Sale!</p>
             <p>{{sale}}</p>
             <product-details :details="details"></product-details>
-                <div v-for="variant in variants" 
+                <div class="color-box"
+                    v-for="(variant, index) in variants" 
                     :key="variant.variantId"
-                    class="color-box"
                     :style="{backgroundColor: variant.variantColor}"
-                    @mouseover="updateProduct(variant.variantImage)">
+                    @mouseover="updateProduct(index)"
+                >
                 </div>
             <h2>Sizes</h2>
             <p v-for="size in sizes"
@@ -50,22 +51,22 @@ Vue.component('product', {
             product: 'Socks', 
             description: 'Green sock with red frogs',
             details:["80% cotton", "20% polyester", "Gender-neutral"],
-            image: "https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg",
             link:"https://www.google.com/search?q=socks&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjFs7WtmevzAhWfA2MBHaRrBLUQ_AUoAXoECAEQAw&biw=1536&bih=763&dpr=1.25",
-            inStock: true,
+            selectedVariant: 0,
             inventory: 100,
             onSale: true,
             sizes:["XL", "L", "M", "S", "XS"],
-           
             brand: "Levis" ,
             variants:[
                 {
                 variantId: 2234,
+                variantQuantity: 15,
                 variantColor: 'green',
                 variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg'
                 },
                 {
                 variantId: 2235,
+                variantQuantity: 7,
                 variantColor: 'blue',
                 variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg'
                 }
@@ -74,18 +75,17 @@ Vue.component('product', {
     },
     methods:{
         addToCart: function () {
-            this.$emit('add-to-cart');
+            this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId);
         },
 
-        updateProduct: function(variantImage){
-            this.image= variantImage;
+        updateProduct: function(index){
+            this.selectedVariant = index
         }
         /*
         decrement: function(){
             this.cart--;
         }
-        */
-        /*instead of writing the functions as anonymous functions
+        instead of writing the functions as anonymous functions
         can write them using ES6 - but not all browsers
         support this feature
         
@@ -101,6 +101,15 @@ Vue.component('product', {
 
     }, 
     computed:{
+        title() {
+            return this.brand + ' ' + this.product
+          },
+        image() {
+        return this.variants[this.selectedVariant].variantImage
+        },
+        inStock(){
+            return this.variants[this.selectedVariant].variantQuantity
+        },
         sale(){
             if(this.onSale){
             return `${this.brand} ${this.product} is on sale!`;
@@ -127,9 +136,9 @@ props:{
     }
 },
 template:`
-<ul>
-<li v-for="detail in details">{{detail}}</li>
-</ul>
+    <ul>
+    <li v-for="detail in details">{{detail}}</li>
+    </ul>
 `
 });
 
@@ -137,11 +146,11 @@ const app = new Vue ({
     el:'#app',
     data:{
         premium: true,
-        cart: 0,
+        cart: [],
     },
     methods:{
-        updateCart : function(){
-            this.cart += 1;
+        updateCart : function(id){
+            this.cart.push(id)
         }
     }
 });
