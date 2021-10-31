@@ -1,11 +1,20 @@
 //creating a new component
 Vue.component('product', {
+    props:{
+        premium: {
+            type: Boolean,
+            required: true
+        }
+    }
+    ,
     template: `
     <div class="product">
         <div class="product-image">
             <img :src="image" :alt="description">
         </div>
         <div class="product-info">
+            <p>User is premium: {{premium}}</p>
+            <p>Shipping: {{shipping}}</p>
             <h1>{{product}}</h1>
             <a :href="link">View more socks</a>
             <p v-if="inventory > 10">In Stock</p>
@@ -102,13 +111,23 @@ Vue.component('product', {
             }else{
             return `${this.brand} ${this.product} is not sale!`;    
             };
+        },
+        shipping(){
+            if(this.premium){//not props premium
+                return "Free"
+            } else {
+                return 2.99
+            }
         }
     }
 });
 
 
 const app = new Vue ({
-    el:'#app'
+    el:'#app',
+    data:{
+        premium: true
+    }
 });
 
 /*
