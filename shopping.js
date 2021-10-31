@@ -6,11 +6,12 @@ const app = new Vue ({
         image: "https://www.vuemastery.com/images/challenges/vmSocks-green-onWhite.jpg",
         link:"https://www.google.com/search?q=socks&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjFs7WtmevzAhWfA2MBHaRrBLUQ_AUoAXoECAEQAw&biw=1536&bih=763&dpr=1.25",
         inStock: false,
-        inventory: 10,
+        inventory: 0,
         onSale: true,
         details:["80% cotton", "20% polyester", "Gender-neutral"],
         sizes:["XL", "L", "M", "S", "XS"],
-        cart: 0, 
+        cart: 0,
+        brand: "Levis" ,
         variants:[
             {
             variantId: 2234,
@@ -21,7 +22,7 @@ const app = new Vue ({
             variantId: 2235,
             variantColor: 'blue',
             variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg'
-        }
+            }
         ]
     },
     methods:{
@@ -50,6 +51,15 @@ const app = new Vue ({
     
         */
 
+    }, 
+    computed:{
+        sale(){
+            if(this.onSale){
+            return `${this.brand} ${this.product} is on sale!`;
+            }else{
+            return `${this.brand} ${this.product} is not sale!`;    
+            };
+        }
     }
 });
 
