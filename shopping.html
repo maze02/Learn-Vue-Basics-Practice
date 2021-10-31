@@ -11,45 +11,10 @@
     </head>
     <body>
         <div class="nav-bar"></div>
-
         <div id="app">
-            <div class="product">
-                <div class="product-image">
-                    <img :src="image" :alt="description">
-                </div>
-                <div class="product-info">
-                    <h1>{{product}}</h1>
-                    <a :href="link">View more socks</a>
-                    <p v-if="inventory > 10">In Stock</p>
-                    <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
-                    <p v-else 
-                        :class="{ outOfStock: !inStock}">Out of Stock</p>
-                    <!-- v-show more performant option than removing it from the dom entirely-->
-                    <p v-show="inStock">testing toggle</p>
-                    <p v-if="onSale">On Sale!</p>
-                    <p>{{sale}}</p>
-                    <ul>
-                        <li v-for="detail in details">{{detail}}</li>
-                    </ul>
-                    <div v-for="variant in variants" 
-                          :key="variant.variantId"
-                           class="color-box"
-                           :style="{backgroundColor: variant.variantColor}"
-                           @mouseover="updateProduct(variant.variantImage)">
-                    </div>
-                    <h2>Sizes</h2>
-                    <p v-for="size in sizes"
-                        >{{size}}</p>
-                    <button v-on:click="cart += 1" 
-                            :disabled="!inStock"
-                            :class="{ disabledButton: !inStock}">Add to Cart</button>
-                    <button v-on:click="addToCart">Duplicate Cart Amount</button>
-                    <button @click="decrement">Decrement Cart Value</button>
-                    <div class="cart">
-                        <p>Cart({{cart}})</p>
-                    </div>
-                </div>
-            </div>
+            <product></product>
+            <product></product>
+            <product></product>
         </div>
     
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
