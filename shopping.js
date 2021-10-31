@@ -36,9 +36,14 @@ Vue.component('product', {
             <h2>Sizes</h2>
             <p v-for="size in sizes"
                 >{{size}}</p>
-            <button v-on:click="addToCart" 
-                    :disabled="!inStock"
-                    :class="{ disabledButton: !inStock}">Add to Cart</button>
+            <div>
+                <button v-on:click="addToCart" 
+                        :disabled="!inStock"
+                        :class="{ disabledButton: !inStock}">Add to Cart</button>
+                <button v-on:click="removeFromCart" 
+                        :disabled="!inStock"
+                        :class="{ disabledButton: !inStock}">Remove From Cart</button>
+            </div>
             <!--
             <button v-on:click="addToCart">Duplicate Cart Amount</button>
             <button @click="decrement">Decrement Cart Value</button>
@@ -76,6 +81,10 @@ Vue.component('product', {
     methods:{
         addToCart: function () {
             this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId);
+        },
+
+        removeFromCart: function (){
+            this.$emit('remove-from-cart', this.variants[this.selectedVariant].variantId);
         },
 
         updateProduct: function(index){
@@ -151,6 +160,14 @@ const app = new Vue ({
     methods:{
         updateCart : function(id){
             this.cart.push(id)
+        },
+        removeFromCart :  function(id){
+          console.log("Hey I'm in removeFromCart and the id is:" + id);
+          const indexRes = this.cart.findIndex(item => item === id); 
+          console.log("Here  is indexRes: " + indexRes + " Here is the cart" + JSON.stringify(this.cart)) ;
+          if(indexRes === 0 || indexRes !== -1){
+              this.cart.splice(indexRes, 1)
+          }  
         }
     }
 });
