@@ -49,6 +49,7 @@ Vue.component('product', {
             <button @click="decrement">Decrement Cart Value</button>
             -->
         </div>
+        <product-review></product-review>
     </div>
     `,
     data(){
@@ -151,6 +152,27 @@ template:`
 `
 });
 
+/*This is where the product reviews are going to happen
+we want whatever the user types into the input to be bound to 
+the name data
+v-bind -> is only for 1 way binding -> from the data to the template (i.e.  name: null  => input)
+but now whatever user inputs to be bound to our data
+i.e. want to add a dimension of data-binding from the template to the data
+vue's v-model directive gives this functionality called 2 way data-binding
+now whenever sth is entered into the input, the data changes
+& whenever the data changes, anywhere using that data, will update
+*/
+Vue.component('product-review', {
+    template: `   
+    <input v-model="name">
+`,
+    data(){
+        return{
+            name:null
+        }
+    }
+});
+
 const app = new Vue ({
     el:'#app',
     data:{
@@ -172,9 +194,11 @@ const app = new Vue ({
     }
 });
 
+
 /*
 record of errors:
 1. the components need to be nested in the   <div id="app">
 2. Remember to add a comma, between the different properties in an object
+3. Components must be above the vue app instance
 */
 
