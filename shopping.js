@@ -1,5 +1,5 @@
-//creating a new component
-const eventBus = new Vue ();
+//global channel though we we can send info - i.e. to transport passengers (state) throughout our app
+const eventBus = new Vue();
 Vue.component('product', {
     props:{
         premium: {
@@ -94,11 +94,9 @@ Vue.component('product', {
 
         updateProduct: function(index){
             this.selectedVariant = index
-        },
-
-        addReview: function(productReview){
-            this.reviews.push(productReview)
         }
+
+      
         /*
         decrement: function(){
             this.cart--;
@@ -140,6 +138,14 @@ Vue.component('product', {
                 return 2.99
             }
         }
+    },
+    //lifecycle hook which contains code you want to run as soon as the component is mounted to the the dom
+    mounted(){
+        //listening for the review-submitted event & it will take our product
+       // review and push it into the reviews array variable.
+        eventBus.$on('review-submitted', productReview =>{
+            this.reviews.push(productReview)
+        })
     }
 });
 
@@ -239,7 +245,7 @@ Vue.component('product-review', {
                     recommend:this.recommend
                 }
                 //sends this info to the parent component: the product component using the emit event
-                this.$emit('review-submitted', productReview) //what's the first param and the second param? look up at docs
+                eventBus.$emit('review-submitted', productReview) //here eventBus is a bit like the context api or useReducer hook
                 //resets values whenever you submit the form
                 this.name = null 
                 this.review = null
@@ -286,7 +292,7 @@ Vue.component('product-tabs', {
                 </ul>
               </div>
           </div>
-          <product-review v-show="selectedTab ==='Make a Review'" @review-submitted="addReview"></product-review>
+          <product-review v-show="selectedTab ==='Make a Review'"></product-review>
     </div>`,
     data(){
         return {
