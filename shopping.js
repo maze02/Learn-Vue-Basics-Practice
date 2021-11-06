@@ -57,7 +57,8 @@ Vue.component('product', {
                 <li v-for="review in reviews">
                     <p>{{ review.name }}</p>
                     <p>Rating: {{ review.rating }}</p>
-                    <p>{{ review.review }}</p>
+                    <p>Comment: {{ review.review }}</p>
+                    <p>Product Recommended: {{ review.recommend }}</p>
                 </li>
             </ul>
         </div>
@@ -210,6 +211,18 @@ Vue.component('product-review', {
           <option>1</option>
         </select>
       </p>
+
+      <p>Would you recommend this product?</p>
+      <div>
+            <label for="yes">Yes</label>
+            <input type="radio" id="yes" name="recommend" value="Yes" v-model="recommend">
+      
+      </div>
+    
+        <div>
+            <label for="no">No</label>
+            <input type="radio" id="no" name="recommend" value="No" v-model="recommend">
+        </div>
           
       <p>
         <input type="submit" value="Submit">  
@@ -222,6 +235,7 @@ Vue.component('product-review', {
             name:null,
             review: null,
             rating: null,
+            recommend: null,
             errors: []
         }
     },
@@ -232,7 +246,8 @@ Vue.component('product-review', {
                 let productReview = { //but where does this go?
                     name: this.name,
                     review: this.review,
-                    rating: this.rating
+                    rating: this.rating,
+                    recommend:this.recommend
                 }
                 //sends this info to the parent component: the product component using the emit event
                 this.$emit('review-submitted', productReview) //what's the first param and the second param? look up at docs
@@ -240,12 +255,14 @@ Vue.component('product-review', {
                 this.name = null 
                 this.review = null
                 this.rating = null
+                this.recommend = null
             }
             else{
                 //Error array corrects errors if values not filled out
                 if(!this.name) this.errors.push("Name required.");
                 if(!this.review) this.errors.push("Review required.");
                 if(!this.rating) this.errors.push("Rating required.");
+                if(!this.recommend) this.errors.push("Recommendation required.");
             }
         }
     }
