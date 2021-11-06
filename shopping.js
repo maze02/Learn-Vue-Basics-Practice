@@ -51,7 +51,8 @@ Vue.component('product', {
             -->
         </div>
         <div>
-        <product-tabs :reviews='reviews'></product-tabs>
+            <product-tabs :reviews='reviews'></product-tabs>
+            <info-tabs></info-tabs>
         </div>
     </div>
     `,
@@ -159,7 +160,7 @@ props:{
 },
 template:`
     <ul>
-    <li v-for="detail in details">{{detail}}</li>
+        <li v-for="detail in details">{{detail}}</li>
     </ul>
 `
 });
@@ -234,7 +235,6 @@ Vue.component('product-review', {
             errors: []
         }
     },
-
     methods: {
         onSubmit: function(){
             if(this.name && this.review && this.rating){
@@ -278,7 +278,6 @@ Vue.component('product-tabs', {
               :key="index"
               @click="selectedTab = tab">
               {{ tab }} </span>
-
               <div>
               <div v-show="selectedTab === 'Reviews'">
                 <p v-if="!reviews.length">There are no reviews yet.</p>
@@ -300,7 +299,36 @@ Vue.component('product-tabs', {
             selectedTab: 'Reviews'
         }
     }
-})
+});
+
+Vue.component('info-tabs', {
+    template:`
+    <div>    
+        <span class="tab"
+            :class="{activeTab : selectedTab === tab}"
+            v-for="(tab, index) in tabs"
+            :key="index"
+            @click="selectedTab = tab">
+            {{ tab }} </span>
+        
+        <div>
+            <div v-show="selectedTab === 'Shipping'">
+                <p>Shipping Info will be shown here</p>
+            </div>
+            <div v-show="selectedTab === 'Detail'">
+                <p>Detail Info will be shown here</p>
+            </div>
+        </div>
+    </div>
+
+    `,
+    data(){
+        return {
+            tabs: ['Shipping', 'Detail'],
+            selectedTab: 'Shipping'
+        }
+    }
+});
 
 const app = new Vue ({
     el:'#app',
