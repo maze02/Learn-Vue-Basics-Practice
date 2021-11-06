@@ -49,7 +49,18 @@ Vue.component('product', {
             <button @click="decrement">Decrement Cart Value</button>
             -->
         </div>
-        <product-review></product-review>
+        <div>
+            <h2>Reviews</h2>
+            <p v-if="!reviews.length">There are no reviews yet.</p>
+            <ul>
+                <li v-for="review in reviews">
+                    <p>{{ review.name }}</p>
+                    <p>Rating: {{ review.rating }}</p>
+                    <p>{{ review.review }}</p>
+                </li>
+            </ul>
+        </div>
+        <product-review @review-submitted="addReview"></product-review>
     </div>
     `,
     data(){
@@ -76,7 +87,8 @@ Vue.component('product', {
                 variantColor: 'blue',
                 variantImage: 'https://www.vuemastery.com/images/challenges/vmSocks-blue-onWhite.jpg'
                 }
-            ]
+            ],
+            reviews: []
         }
     },
     methods:{
@@ -90,6 +102,10 @@ Vue.component('product', {
 
         updateProduct: function(index){
             this.selectedVariant = index
+        },
+
+        addReview: function(productReview){
+            this.reviews.push(productReview)
         }
         /*
         decrement: function(){
@@ -106,9 +122,7 @@ Vue.component('product', {
         updateProduct(variantImage){
             this.image = variantImage
         }
-    
         */
-
     }, 
     computed:{
         title() {
@@ -164,11 +178,55 @@ now whenever sth is entered into the input, the data changes
 */
 Vue.component('product-review', {
     template: `   
-    <input v-model="name">
+    <form class="review-form" @submit.prevent="onSubmit"> <!--stops page from refreshing when you submit-->
+      <p>
+        <label for="name">Name:</label>
+        <input id="name" v-model="name">
+      </p>
+      
+      <p>
+        <label for="review">Review:</label>      
+        <textarea id="review" v-model="review"></textarea>
+      </p>
+      
+      <p>
+        <label for="rating">Rating:</label>
+        <select id="rating" v-model.number="rating"> <!--.number modifier typecasts the input so only a number can be added -->
+          <option>5</option>
+          <option>4</option>
+          <option>3</option>
+          <option>2</option>
+          <option>1</option>
+        </select>
+      </p>
+          
+      <p>
+        <input type="submit" value="Submit">  
+      </p>    
+    
+    </form>
 `,
     data(){
         return{
-            name:null
+            name:null,
+            review: null,
+            rating: null
+        }
+    },
+
+    methods: {
+        onSubmit: function(){
+            let productReview = { //but where does this go?
+                name: this.name,
+                review: this.review,
+                rating: this.rating
+            }
+            //sends this info to the parent component: the product component using the emit event
+            this.$emit('review-submitted', productReview) //what's the first param and the second param? look up at docs
+            //resets values whenever you submit the form
+            this.name = null 
+            this.review = null
+            this.rating = null
         }
     }
 });
