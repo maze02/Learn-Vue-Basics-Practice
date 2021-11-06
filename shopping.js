@@ -1,4 +1,5 @@
 //creating a new component
+const eventBus = new Vue ();
 Vue.component('product', {
     props:{
         premium: {
@@ -50,19 +51,7 @@ Vue.component('product', {
             -->
         </div>
         <div>
-        <div>
-            <h2>Reviews</h2>
-            <p v-if="!reviews.length">There are no reviews yet.</p>
-            <ul>
-                <li v-for="review in reviews">
-                    <p>{{ review.name }}</p>
-                    <p>Rating: {{ review.rating }}</p>
-                    <p>Comment: {{ review.review }}</p>
-                    <p>Product Recommended: {{ review.recommend }}</p>
-                </li>
-            </ul>
-        </div>
-        <product-review @review-submitted="addReview"></product-review>
+        <product-tabs :reviews='reviews'></product-tabs>
         </div>
     </div>
     `,
@@ -267,6 +256,45 @@ Vue.component('product-review', {
         }
     }
 });
+
+Vue.component('product-tabs', {
+    props:{
+        reviews:{
+            type: Array,
+            required: true
+        }
+    },
+    template: `
+    <div>
+        <span class="tab"
+              :class="{ activeTab : selectedTab === tab}"
+              v-for="(tab, index) in tabs" 
+              :key="index"
+              @click="selectedTab = tab">
+              {{ tab }} </span>
+
+              <div>
+              <div v-show="selectedTab === 'Reviews'">
+                <p v-if="!reviews.length">There are no reviews yet.</p>
+                <ul>
+                    <li v-for="review in reviews">
+                        <p>{{ review.name }}</p>
+                        <p>Rating: {{ review.rating }}</p>
+                        <p>Comment: {{ review.review }}</p>
+                        <p>Product Recommended: {{ review.recommend }}</p>
+                    </li>
+                </ul>
+              </div>
+          </div>
+          <product-review v-show="selectedTab ==='Make a Review'" @review-submitted="addReview"></product-review>
+    </div>`,
+    data(){
+        return {
+            tabs: ['Reviews', 'Make a Review'],
+            selectedTab: 'Reviews'
+        }
+    }
+})
 
 const app = new Vue ({
     el:'#app',
