@@ -1,5 +1,6 @@
 //global channel though we we can send info - i.e. to transport passengers (state) throughout our app
 const eventBus = new Vue();
+
 Vue.component('product', {
     props:{
         premium: {
@@ -17,7 +18,6 @@ Vue.component('product', {
             <h1>{{product}}</h1>
             <a :href="link">View more socks</a>
             <p>User is premium: {{premium}}</p>
-            <p>Shipping: {{shipping}}</p>
             <p v-if="inventory > 10">In Stock</p>
             <p v-else-if="inventory <= 10 && inventory > 0">Almost sold out!</p>
             <p v-else 
@@ -26,7 +26,8 @@ Vue.component('product', {
             <!-- <p v-show="inStock">testing toggle</p> -->
             <p v-if="onSale">On Sale!</p>
             <p>{{sale}}</p>
-            <product-details :details="details"></product-details>
+            <!--<product-details :details="details"></product-details>-->
+            <info-tabs :shipping='shipping' :details='details'></info-tabs>
                 <div class="color-box"
                     v-for="(variant, index) in variants" 
                     :key="variant.variantId"
@@ -52,7 +53,6 @@ Vue.component('product', {
         </div>
         <div>
             <product-tabs :reviews='reviews'></product-tabs>
-            <info-tabs></info-tabs>
         </div>
     </div>
     `,
@@ -302,6 +302,16 @@ Vue.component('product-tabs', {
 });
 
 Vue.component('info-tabs', {
+    props:{
+        shipping:{
+            type: String|Number,
+            required:true
+        },
+        details:{
+            type: Array,
+            required:true
+        }
+    },
     template:`
     <div>    
         <span class="tab"
@@ -313,10 +323,10 @@ Vue.component('info-tabs', {
         
         <div>
             <div v-show="selectedTab === 'Shipping'">
-                <p>Shipping Info will be shown here</p>
+                <p>Shipping: {{shipping}}</p>
             </div>
             <div v-show="selectedTab === 'Detail'">
-                <p>Detail Info will be shown here</p>
+                <product-details :details="details"></product-details>
             </div>
         </div>
     </div>
